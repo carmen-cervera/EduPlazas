@@ -1,0 +1,108 @@
+.fondo {
+    height: 100vh;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .card {
+    background: white;
+    border-radius: 20px;
+    padding: 40px;
+    width: 420px;
+    max-width: 95%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  }
+  
+  .logo {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #7eb8f7;
+    margin: 0;
+  }
+  
+  .logo span {
+    color: #1a3a8f;
+  }
+  
+  .subtitulo {
+    font-size: 0.85rem;
+    color: #666;
+    margin: 4px 0 20px 0;
+  }
+  
+  .titulo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #222;
+    margin: 0;
+    align-self: flex-start;
+  }
+  
+  .rol {
+    color: #1a3a8f;
+    font-weight: bold;
+    font-size: 1rem;
+    margin: 2px 0 15px 0;
+    align-self: flex-start;
+  }
+  
+  .input {
+    width: 100%;
+    padding: 12px 15px;
+    margin-bottom: 12px;
+    border: 2px solid #7eb8f7;
+    border-radius: 8px;
+    font-size: 1rem;
+    box-sizing: border-box;
+    color: #7eb8f7;
+  }
+  
+  .input::placeholder {
+    color: #7eb8f7;
+  }
+  
+  .btnLogin {
+    width: 100%;
+    padding: 14px;
+    background-color: #1a3a8f;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    margin-bottom: 10px;
+  }
+  
+  .btnSignin {
+    width: 100%;
+    padding: 14px;
+    background-color: #7eb8f7;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .btnLogin:hover { opacity: 0.9; }
+  .btnSignin:hover { opacity: 0.9; }
+  
+  .error {
+    color: red;
+    font-size: 0.85rem;
+    margin-bottom: 10px;
+  }
+
+  .logoImg {
+    height: 80px;
+    cursor: pointer;
+    margin-bottom: 10px;
+  }
