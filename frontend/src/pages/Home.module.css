@@ -1,0 +1,59 @@
+.container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  background-color: #1a3a8f;
+  padding: 20px 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo {
+  height: 130px;
+  cursor: pointer;
+}
+
+.fondo {
+  flex: 1;
+  background-image: url('https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=1600');
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.botones {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.btnEstudiantes {
+  background-color: #1a3a8f;
+  color: white;
+  border: none;
+  padding: 20px 80px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  border-radius: 30px;
+  cursor: pointer;
+}
+
+.btnUniversidades {
+  background-color: #5b9bd5;
+  color: white;
+  border: none;
+  padding: 20px 80px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  border-radius: 30px;
+  cursor: pointer;
+}
+
+.btnEstudiantes:hover { opacity: 0.9; }
+.btnUniversidades:hover { opacity: 0.9; }

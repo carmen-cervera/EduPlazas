@@ -31,15 +31,40 @@ public class DataLoader {
             convocatoriaRepo.save(conv);
 
             // Universidades
+            Universidad ucm = new Universidad();
+            ucm.setNombre("Universidad Complutense de Madrid");
+            ucm.setProvincia("Madrid");
+            universidadRepo.save(ucm);
+
             Universidad upm = new Universidad();
             upm.setNombre("Universidad Politécnica de Madrid");
             upm.setProvincia("Madrid");
             universidadRepo.save(upm);
 
-            Universidad ucm = new Universidad();
-            ucm.setNombre("Universidad Complutense de Madrid");
-            ucm.setProvincia("Madrid");
-            universidadRepo.save(ucm);
+            Universidad uam = new Universidad();
+            uam.setNombre("Universidad Autónoma de Madrid");
+            uam.setProvincia("Madrid");
+            universidadRepo.save(uam);
+
+            Universidad uc3m = new Universidad();
+            uc3m.setNombre("Universidad Carlos III de Madrid");
+            uc3m.setProvincia("Madrid");
+            universidadRepo.save(uc3m);
+
+            Universidad urjc = new Universidad();
+            urjc.setNombre("Universidad Rey Juan Carlos");
+            urjc.setProvincia("Madrid");
+            universidadRepo.save(urjc);
+
+            Universidad uah = new Universidad();
+            uah.setNombre("Universidad de Alcalá");
+            uah.setProvincia("Madrid");
+            universidadRepo.save(uah);
+
+            Universidad uned = new Universidad();
+            uned.setNombre("Universidad Nacional de Educación a Distancia");
+            uned.setProvincia("Madrid");
+            universidadRepo.save(uned);
 
             // Ofertas con criterios
             Oferta oferta1 = new Oferta();

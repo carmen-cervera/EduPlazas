@@ -1,0 +1,119 @@
+.fondo {
+    min-height: 100vh;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px 20px;
+  }
+  
+  .card {
+    background: white;
+    border-radius: 20px;
+    padding: 30px 40px;
+    padding-bottom: 70px;
+    width: 700px;
+    max-width: 100%;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .logoImg {
+    height: 90px;
+    cursor: pointer;
+    margin-bottom: 8px;
+  }
+  
+  .titulo {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #1a3a8f;
+    margin: 0;
+    align-self: flex-start;
+  }
+  
+  .rol {
+    color: #1a3a8f;
+    font-weight: 600;
+    font-size: 0.85rem;
+    margin: 2px 0 15px 0;
+    align-self: flex-start;
+  }
+  
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    width: 100%;
+    margin-bottom: 12px;
+  }
+  
+  .fullWidth {
+    grid-column: 1 / -1;
+  }
+  
+  .label {
+    display: block;
+    font-size: 0.75rem;
+    color: #444;
+    margin-bottom: 3px;
+  }
+  
+  .input {
+    width: 100%;
+    padding: 8px 10px;
+    border: 2px solid #7eb8f7;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    box-sizing: border-box;
+    color: #333;
+  }
+  
+  .input:focus {
+    outline: none;
+    border-color: #1a3a8f;
+  }
+  
+  .btnPrimario {
+    width: 100%;
+    padding: 11px;
+    background-color: #1a3a8f;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: bold;
+    cursor: pointer;
+    margin-bottom: 8px;
+    margin-top: 20px;
+  }
+  
+  .btnSecundario {
+    width: 100%;
+    padding: 11px;
+    background-color: #7eb8f7;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .btnPrimario:hover { opacity: 0.9; }
+  .btnSecundario:hover { opacity: 0.9; }
+  
+  .error {
+    color: red;
+    font-size: 0.85rem;
+    margin-bottom: 10px;
+    align-self: flex-start;
+  }
+  
+  .exito {
+    color: green;
+    font-size: 1.1rem;
+  }
