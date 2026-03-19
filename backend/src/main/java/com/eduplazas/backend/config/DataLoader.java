@@ -24,7 +24,7 @@ public class DataLoader {
 
             // Convocatoria
             Convocatoria conv = new Convocatoria();
-            conv.setNombre("EvAU Madrid 2025");
+            conv.setNombre("EvAU Junio 2026");
             conv.setFechaInicio(LocalDate.of(2025, 6, 1));
             conv.setFechaFin(LocalDate.of(2025, 6, 30));
             conv.setEstado("ABIERTA");
@@ -86,6 +86,7 @@ public class DataLoader {
             oferta1.setCriterios(List.of(c1, c2));
             ofertaRepo.save(oferta1);
 
+
             Oferta oferta2 = new Oferta();
             oferta2.setGrado("Medicina");
             oferta2.setPlazas(80);
@@ -104,6 +105,66 @@ public class DataLoader {
 
             oferta2.setCriterios(List.of(c3, c4));
             ofertaRepo.save(oferta2);
+
+
+            Oferta oferta3 = new Oferta();
+            oferta3.setGrado("Derecho");
+            oferta3.setPlazas(650);
+            oferta3.setUniversidad(ucm);
+            oferta3.setConvocatoria(conv);
+
+            CriterioAdmision c5 = new CriterioAdmision();
+            c5.setAsignatura("Historia del Arte");
+            c5.setPeso(0.2);
+            c5.setOferta(oferta3);
+
+            CriterioAdmision c6 = new CriterioAdmision();
+            c6.setAsignatura("Latín");
+            c6.setPeso(0.2);
+            c6.setOferta(oferta3);
+
+            oferta3.setCriterios(List.of(c5, c6));
+            ofertaRepo.save(oferta3);
+
+
+            Oferta oferta4 = new Oferta();
+            oferta4.setGrado("Psicología");
+            oferta4.setPlazas(350);
+            oferta4.setUniversidad(uam);
+            oferta4.setConvocatoria(conv);
+
+            CriterioAdmision c7 = new CriterioAdmision();
+            c7.setAsignatura("Biología");
+            c7.setPeso(0.2);
+            c7.setOferta(oferta4);
+
+            CriterioAdmision c8 = new CriterioAdmision();
+            c8.setAsignatura("Física");
+            c8.setPeso(0.2);
+            c8.setOferta(oferta4);
+
+            oferta4.setCriterios(List.of(c7, c8));
+            ofertaRepo.save(oferta4);
+
+
+            Oferta oferta5 = new Oferta();
+            oferta5.setGrado("Bellas Artes");
+            oferta5.setPlazas(70);
+            oferta5.setUniversidad(urjc);
+            oferta5.setConvocatoria(conv);
+
+            CriterioAdmision c9 = new CriterioAdmision();
+            c9.setAsignatura("Dibujo Técnico II");
+            c9.setPeso(0.2);
+            c9.setOferta(oferta5);
+
+            CriterioAdmision c10 = new CriterioAdmision();
+            c10.setAsignatura("Historia del Arte");
+            c10.setPeso(0.2);
+            c10.setOferta(oferta5);
+
+            oferta5.setCriterios(List.of(c9, c10));
+            ofertaRepo.save(oferta5);
 
             // Solicitantes
             Solicitante s1 = new Solicitante();

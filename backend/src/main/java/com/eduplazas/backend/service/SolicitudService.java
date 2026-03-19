@@ -1,29 +1,113 @@
 package com.eduplazas.backend.service;
 
+import com.eduplazas.backend.model.Convocatoria;
+import com.eduplazas.backend.model.Oferta;
+import com.eduplazas.backend.model.Solicitante;
 import com.eduplazas.backend.model.Solicitud;
+import com.eduplazas.backend.repository.ConvocatoriaRepository;
+import com.eduplazas.backend.repository.OfertaRepository;
+import com.eduplazas.backend.repository.SolicitanteRepository;
 import com.eduplazas.backend.repository.SolicitudRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+
 
 @Service
 public class SolicitudService {
 
     private final SolicitudRepository solicitudRepository;
+    private final SolicitanteRepository solicitanteRepository;
+    private final ConvocatoriaRepository convocatoriaRepository;
+    private final OfertaRepository ofertaRepository;
 
-    public SolicitudService(SolicitudRepository solicitudRepository) {
+    public SolicitudService(SolicitudRepository solicitudRepository,
+                            SolicitanteRepository solicitanteRepository,
+                            ConvocatoriaRepository convocatoriaRepository,
+                            OfertaRepository ofertaRepository ) {
         this.solicitudRepository = solicitudRepository;
+        this.solicitanteRepository = solicitanteRepository;
+        this.convocatoriaRepository = convocatoriaRepository;
+        this.ofertaRepository = ofertaRepository;
+    }
+    //CREACIÓN DE LA SOLICITUD
+    public Solicitud crearSolicitud(Solicitud solicitudRecibida) {
+        //
+        if(solicitudRecibida.getSolicitante() == null || solicitudRecibida.getSolicitante().getId() == null){
+            throw new RuntimeException("ERROR: Debes indicar que eres el solicitante");
+        }
+        //
+        if (solicitudRecibida.getConvocatoria() == null || solicitudRecibida.getConvocatoria().getId() == null) {
+            throw new RuntimeException("ERROR: Debes indicar la convocatoria");
+        }
+        //
+        if (solicitudRecibida.getPreferencias() == null || solicitudRecibida.getPreferencias().isEmpty()) {
+            throw new RuntimeException("ERROR: Debes seleccionar al menos una oferta");
+        }
+
+        Solicitante solicitante = solicitanteRepository.findById(solicitudRecibida.getSolicitante().getId())
+                .orElseThrow(() -> new RuntimeException("ERROR: Solicitante no encontrado"));
+
+        Convocatoria convocatoria = convocatoriaRepository.findById(solicitudRecibida.getConvocatoria().getId())
+                .orElseThrow(() -> new RuntimeException("ERROR: Convocatoria no encontrada"));
+
+        if (!"ABIERTA".equalsIgnoreCase(convocatoria.getEstado())) {
+            throw new RuntimeException("La convocatoria no está abierta");
+        }
+
+        boolean existeSolicitud = solicitudRepository
+                .findBySolicitanteIdAndConvocatoriaId(solicitante.getId(), convocatoria.getId())
+                .isPresent();
+
+        if (existeSolicitud) {
+            throw new RuntimeException("No puedes enviar más de una solicitud para una convocatoria");
+        }
+
+        List<Long> idsOfertas = solicitudRecibida.getPreferencias()
+                .stream()
+                .map(Oferta::getId)
+                .collect(Collectors.toList());
+
+        Set<Long> idsSinDuplicados = new HashSet<>(idsOfertas);
+        if (idsOfertas.size() != idsSinDuplicados.size()) {
+            throw new RuntimeException("No puede haber grados repetidos en la solicitud");
+        }
+
+        List<Oferta> ofertas = ofertaRepository.findAllById(idsOfertas);
+
+        for (Oferta oferta : ofertas) {
+            if (!oferta.getConvocatoria().getId().equals(convocatoria.getId())) {
+                throw new RuntimeException("Todas las ofertas deben pertenecer a la convocatoria abierta");
+            }
+        }
+
+        Solicitud nuevaSolicitud = new Solicitud();
+        nuevaSolicitud.setSolicitante(solicitante);
+        nuevaSolicitud.setConvocatoria(convocatoria);
+        nuevaSolicitud.setEstado("ENVIADA");
+        nuevaSolicitud.setPreferencias(ofertas);
+
+        return solicitudRepository.save(nuevaSolicitud);
+
+
+    }
+    public Solicitante obtenerSolicitantePorUsuario(Long usuarioId) {
+        return solicitanteRepository.findByUsuarioId(usuarioId).orElse(null);
     }
 
-    public List<Solicitud> obtenerTodas() {
-        return solicitudRepository.findAll();
+    public Solicitud obtenerSolicitudPorUsuario(Long usuarioId) {
+        return solicitudRepository.findBySolicitanteUsuarioId(usuarioId).orElse(null);
     }
 
-    public Solicitud obtenerPorId(Long id) {
-        return solicitudRepository.findById(id).orElse(null);
+    public Convocatoria obtenerConvocatoriaAbierta() {
+        return convocatoriaRepository.findByEstado("ABIERTA").orElse(null);
     }
 
-    public Solicitud guardar(Solicitud solicitud) {
-        return solicitudRepository.save(solicitud);
+    public List<Oferta> obtenerOfertasPorConvocatoria(Long convocatoriaId) {
+        return ofertaRepository.findByConvocatoriaId(convocatoriaId);
     }
 }

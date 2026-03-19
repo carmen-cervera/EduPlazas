@@ -1,5 +1,6 @@
 package com.eduplazas.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.util.List;
 
@@ -22,6 +23,7 @@ public class Oferta {
     private Convocatoria convocatoria;
 
     @OneToMany(mappedBy = "oferta", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<CriterioAdmision> criterios;
 
     public Long getId() { return id; }
