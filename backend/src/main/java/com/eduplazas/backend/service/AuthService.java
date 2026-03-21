@@ -99,10 +99,10 @@ public class AuthService {
 
     // LOGIN
     public Usuario login(String email, String password) {
-        Usuario usuario = usuarioRepository.findByEmail(email).orElse(null);
-        if (usuario == null) return null;
-        if (!passwordEncoder.matches(password, usuario.getPassword())) return null;
-        return usuario;
+    Usuario usuario = usuarioRepository.findByEmail(email).orElse(null);
+    if (usuario == null) return null;
+    if (!passwordEncoder.matches(password, usuario.getPassword())) return null;
+    return usuario;
     }
 
     // Validar ID EvAU contra el archivo JSON

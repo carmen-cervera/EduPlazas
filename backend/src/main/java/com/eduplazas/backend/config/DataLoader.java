@@ -18,9 +18,20 @@ public class DataLoader {
             UniversidadRepository universidadRepo,
             OfertaRepository ofertaRepo,
             SolicitanteRepository solicitanteRepo,
-            SolicitudRepository solicitudRepo) {
+            SolicitudRepository solicitudRepo,
+            UsuarioRepository usuarioRepo) {
 
         return args -> {
+
+            // Usuario admin
+            Usuario admin = new Usuario();
+            admin.setEmail("admin");
+            admin.setPassword(new org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder().encode("admin1234"));
+            admin.setRol("ADMIN");
+            admin.setNombre("Admin");
+            admin.setApellidos("Admin");
+            universidadRepo.findAll().stream().findFirst().ifPresent(admin::setUniversidad);
+            usuarioRepo.save(admin);
 
             // Convocatoria
             Convocatoria conv = new Convocatoria();

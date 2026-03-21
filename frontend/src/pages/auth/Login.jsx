@@ -19,9 +19,11 @@ function Login({ rol }) {
       localStorage.setItem('usuario', JSON.stringify(usuario))
       if (usuario.rol === 'ESTUDIANTE') {
         navigate('/estudiante/inicio')
-      } else {
+    } else if (usuario.rol === 'UNIVERSIDAD') {
         navigate('/universidad/inicio')
-      }
+    } else if (usuario.rol === 'ADMIN') {
+        navigate(esEstudiante ? '/estudiante/inicio' : '/universidad/inicio')
+    }
     } catch (err) {
       setError('Usuario o contraseña incorrectos')
     }
