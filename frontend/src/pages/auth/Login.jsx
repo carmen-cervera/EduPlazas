@@ -29,6 +29,17 @@ function Login({ rol }) {
     }
   }
 
+  const entrarComoInvitado = () => {
+    const usuarioInvitado = {
+      id: null,
+      email: 'invitado@eduplazas.local',
+      rol: 'INVITADO',
+      nombre: 'Invitado'
+    }
+    localStorage.setItem('usuario', JSON.stringify(usuarioInvitado))
+    navigate('/estudiante/grados')
+  }
+
   return (
     <div
       className={styles.fondo}
@@ -74,6 +85,11 @@ function Login({ rol }) {
           onClick={() => navigate(esEstudiante ? '/registro/estudiante' : '/registro/universidad')}>
           Sign in
         </button>
+        {esEstudiante && (
+          <button className={styles.btnGuest} onClick={entrarComoInvitado}>
+            Entrar como invitado
+          </button>
+        )}
       </div>
     </div>
   )

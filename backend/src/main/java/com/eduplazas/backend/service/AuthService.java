@@ -2,8 +2,10 @@ package com.eduplazas.backend.service;
 
 import com.eduplazas.backend.model.Universidad;
 import com.eduplazas.backend.model.Usuario;
+import com.eduplazas.backend.model.Solicitante;
 import com.eduplazas.backend.repository.UniversidadRepository;
 import com.eduplazas.backend.repository.UsuarioRepository;
+import com.eduplazas.backend.repository.SolicitanteRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.core.io.ClassPathResource;
@@ -18,13 +20,16 @@ public class AuthService {
 
     private final UsuarioRepository usuarioRepository;
     private final UniversidadRepository universidadRepository;
+    private final SolicitanteRepository solicitanteRepository;
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     public AuthService(UsuarioRepository usuarioRepository,
-                       UniversidadRepository universidadRepository) {
+                       UniversidadRepository universidadRepository,
+                       SolicitanteRepository solicitanteRepository) {
         this.usuarioRepository = usuarioRepository;
         this.universidadRepository = universidadRepository;
+        this.solicitanteRepository = solicitanteRepository;
     }
 
     // REGISTRO ESTUDIANTE
@@ -61,6 +66,16 @@ public class AuthService {
         usuario.setRol("ESTUDIANTE");
 
         usuarioRepository.save(usuario);
+
+        Solicitante solicitante = new Solicitante();
+        solicitante.setNombre(nombre);
+        solicitante.setApellidos(apellidos);
+        solicitante.setEmail(email);
+        solicitante.setUsuario(usuario);
+        solicitante.setNotaBase(0.0); //por el momento se inicializa a 0, se actualizará al calcular la nota final
+        
+        solicitanteRepository.save(solicitante);
+        
         return "OK";
     }
 

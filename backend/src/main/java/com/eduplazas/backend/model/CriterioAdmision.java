@@ -1,5 +1,6 @@
 package com.eduplazas.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -14,6 +15,7 @@ public class CriterioAdmision {
 
     @ManyToOne
     @JoinColumn(name = "oferta_id")
+    @JsonIgnore //corta el bucle que se formaba entre Ofertas -> criterios y CriterioAdmision -> oferta
     private Oferta oferta;
 
     public Long getId() { return id; }

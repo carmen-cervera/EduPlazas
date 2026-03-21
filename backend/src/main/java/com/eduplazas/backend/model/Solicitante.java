@@ -30,4 +30,11 @@ public class Solicitante {
     public void setNotaBase(double notaBase) { this.notaBase = notaBase; }
     public List<NotaAsignatura> getNotas() { return notas; }
     public void setNotas(List<NotaAsignatura> notas) { this.notas = notas; }
+
+    @OneToOne
+    @JoinColumn(name = "usuario_id", unique = true)
+    private Usuario usuario;
+
+    public Usuario getUsuario() { return usuario; }
+    public void setUsuario(Usuario usuario) { this.usuario = usuario; }
 }

@@ -91,9 +91,23 @@
     font-weight: bold;
     cursor: pointer;
   }
+
+  .btnGuest {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    background-color: transparent;
+    color: #7eb8f7;
+    border: 2px solid #7eb8f7;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
   
   .btnLogin:hover { opacity: 0.9; }
   .btnSignin:hover { opacity: 0.9; }
+  .btnGuest:hover { opacity: 0.9; }
   
   .error {
     color: red;
