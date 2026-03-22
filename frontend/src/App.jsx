@@ -7,14 +7,15 @@ import EstudianteInicio from './pages/solicitudes/EstudianteInicio'
 import CrearSolicitud from './pages/solicitudes/CrearSolicitud'
 import ExplorarGrados from './pages/solicitudes/ExplorarGrados'
 import VerSolicitud from './pages/solicitudes/VerSolicitud'
+import UniversidadInicio from './pages/solicitudes/UniversidadInicio'
 
 
-function ProtectedRoute({ element, allowedRoles }) {
+function ProtectedRoute({ element, allowedRoles, redirectTo = '/estudiantes/login' }) {
   const usuarioGuardado = localStorage.getItem('usuario')
   const usuario = usuarioGuardado ? JSON.parse(usuarioGuardado) : null
 
   if (!usuario) {
-    return <Navigate to="/estudiantes/login" replace />
+    return <Navigate to={redirectTo} replace />
   }
 
   if (!allowedRoles.includes(usuario.rol)) {
@@ -51,6 +52,16 @@ function App() {
         <Route
           path="/estudiante/ver-solicitud"
           element={<ProtectedRoute element={<VerSolicitud />} allowedRoles={['ESTUDIANTE', 'ADMIN']} />}
+        />
+        <Route
+          path="/universidad/inicio"
+          element={
+            <ProtectedRoute
+              element={<UniversidadInicio />}
+              allowedRoles={['UNIVERSIDAD', 'ADMIN']}
+              redirectTo="/universidades/login"
+            />
+          }
         />
       </Routes>
     </BrowserRouter>

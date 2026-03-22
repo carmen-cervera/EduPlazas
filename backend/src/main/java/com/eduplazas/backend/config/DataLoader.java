@@ -5,6 +5,7 @@ import com.eduplazas.backend.repository.*;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -23,15 +24,7 @@ public class DataLoader {
 
         return args -> {
 
-            // Usuario admin
-            Usuario admin = new Usuario();
-            admin.setEmail("admin");
-            admin.setPassword(new org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder().encode("admin1234"));
-            admin.setRol("ADMIN");
-            admin.setNombre("Admin");
-            admin.setApellidos("Admin");
-            universidadRepo.findAll().stream().findFirst().ifPresent(admin::setUniversidad);
-            usuarioRepo.save(admin);
+            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
             // Convocatoria
             Convocatoria conv = new Convocatoria();
@@ -76,6 +69,18 @@ public class DataLoader {
             uned.setNombre("Universidad Nacional de Educación a Distancia");
             uned.setProvincia("Madrid");
             universidadRepo.save(uned);
+
+            // Usuario admin (tras universidades, para asociar una; contraseña: 1234)
+            if (!usuarioRepo.existsByEmail("admin")) {
+                Usuario admin = new Usuario();
+                admin.setEmail("admin");
+                admin.setPassword(encoder.encode("1234"));
+                admin.setRol("ADMIN");
+                admin.setNombre("Admin");
+                admin.setApellidos("Admin");
+                universidadRepo.findAll().stream().findFirst().ifPresent(admin::setUniversidad);
+                usuarioRepo.save(admin);
+            }
 
             // Ofertas con criterios
             Oferta oferta1 = new Oferta();

@@ -19,11 +19,14 @@ function Login({ rol }) {
       localStorage.setItem('usuario', JSON.stringify(usuario))
       if (usuario.rol === 'ESTUDIANTE') {
         navigate('/estudiante/inicio')
-    } else if (usuario.rol === 'UNIVERSIDAD') {
+      } else if (usuario.rol === 'UNIVERSIDAD') {
         navigate('/universidad/inicio')
-    } else if (usuario.rol === 'ADMIN') {
+      } else if (usuario.rol === 'ADMIN') {
+        // Mismo usuario admin: pantalla de estudiante o de universidad según el login elegido
         navigate(esEstudiante ? '/estudiante/inicio' : '/universidad/inicio')
-    }
+      } else {
+        navigate('/')
+      }
     } catch (err) {
       setError('Usuario o contraseña incorrectos')
     }
@@ -62,8 +65,9 @@ function Login({ rol }) {
 
         <input
           className={styles.input}
-          type="email"
-          placeholder="Usuario"
+          type="text"
+          autoComplete="username"
+          placeholder="Email o usuario"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
