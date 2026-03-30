@@ -1,8 +1,15 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import styles from './PublicarOferta.module.css';
 import logo from '../../assets/LogoPequeño_FondoBlanco_SinGorro.png'
 
 const PublicarOferta = () => {
+   const navigate = useNavigate();
+   const handleLogout = () => {
+      localStorage.removeItem('token');
+      navigate('/universidades/login');
+    };
+
   return (
     <div className={styles.page}>
       <header className={styles.header}>
@@ -18,9 +25,9 @@ const PublicarOferta = () => {
           </div>
           <nav>
             <button className={styles.primaryButton}>Publicar Oferta</button>
-            <button className={styles.button}>Grados Publicados</button>
+            <button className={styles.button} onClick={() => navigate('/universidad/inicio')} >Grados Publicados</button>
           </nav>
-          <button className={styles.button}>Log Out</button>
+          <button className={styles.logoutBtn} onClick={handleLogout}>Log Out</button>
         </aside>
 
         <main className={styles.main}>
