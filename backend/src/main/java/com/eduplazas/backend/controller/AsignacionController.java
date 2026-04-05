@@ -1,4 +1,4 @@
-ackage com.eduplazas.backend.controller;
+package com.eduplazas.backend.controller;
 
 import com.eduplazas.backend.model.Asignacion;
 import com.eduplazas.backend.service.AsignacionService;
@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/asignaciones")
@@ -32,7 +33,7 @@ public class AsignacionController {
     }
 
  // Ver la asignación de un estudiante concreto
-    @GetMapping("/mi-asignacion/{usuarioId}")
+    @GetMapping("/estudiante/{usuarioId}")
     public ResponseEntity<?> obtenerMiAsignacion(@PathVariable Long usuarioId) {
         Optional<Asignacion> asignacion = asignacionService.obtenerPorUsuario(usuarioId);
         if (asignacion.isPresent()) {
