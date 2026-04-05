@@ -19,7 +19,9 @@ public class Asignacion {
 
     private double notaFinal;
     private String estado;
-
+    
+    public Asignacion() {}
+    
     public Asignacion(Solicitante solicitante, Oferta oferta, double notaFinal, String estado) {
         this.solicitante = solicitante;
         this.oferta = oferta;
