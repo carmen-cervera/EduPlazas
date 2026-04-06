@@ -2,17 +2,39 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './UniversidadInicio.module.css';
 import logo from '../../assets/LogoPequeño_FondoBlanco_SinGorro.png';
+import { obtenerUniversidades } from '../../services/authService';
 
 const UniversidadInicio = () => {
   const navigate = useNavigate();
   const [grados, setGrados] = useState([]);
+  const [nombreUni, setNombreUni] = useState('');
   useEffect(() => {
     const ofertasGuardadas = JSON.parse(localStorage.getItem('misOfertas')) || [];
     setGrados(ofertasGuardadas);
+
+    const dataUsuario = localStorage.getItem('usuario');
+    if (dataUsuario) {
+      const usuarioObj = JSON.parse(dataUsuario);
+      obtenerUniversidades()
+        .then(res => {
+          const lista = res.data;
+          const miUni = lista.find(u => u.id === usuarioObj.id);
+          if (miUni) {
+            setNombreUni(miUni.nombre);
+          } else {
+            setNombreUni(usuarioObj.email);
+          }
+        })
+        .catch(err => {
+          console.error("Error al cargar universidades:", err);
+          setNombreUni(usuarioObj.email);
+        });
+    }
   }, []);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('usuario');
     navigate('/universidades/login');
   };
 
@@ -27,7 +49,7 @@ const UniversidadInicio = () => {
         <aside className={styles.sidebar}>
           <div className={styles.uLogoSection}>
             <div className={styles.avatar}>🏛️</div>
-            <p className={styles.uNombre}>Universidad Politécnica de Madrid</p>
+            <p className={styles.uNombre}>{nombreUni}</p>
           </div>
 
           <nav className={styles.navLinks}>
@@ -60,6 +82,8 @@ const UniversidadInicio = () => {
                   <th>Comunidad Autónoma</th>
                   <th>Rama</th>
                   <th>Plazas</th>
+                  <th style={{ width: '250px' }}>Ponderaciones (0.2)</th>
+                  <th style={{ width: '250px' }}>Ponderaciones (0.1)</th>
                 </tr>
               </thead>
               <tbody>
@@ -70,6 +94,17 @@ const UniversidadInicio = () => {
                     <td>{grado.comunidad}</td>
                     <td>{grado.rama}</td>
                     <td>{grado.plazas}</td>
+                    <td>
+                      {grado.ponderaciones02 && grado.ponderaciones02.length > 0
+                        ? grado.ponderaciones02.join(', ')
+                        : "---"}
+                    </td>
+                    <td>
+                      {grado.ponderaciones01 && grado.ponderaciones01.length > 0
+                        ? grado.ponderaciones02.join(', ')
+                        : "---"}
+                    </td>
+
                   </tr>
                 ))}
 
@@ -79,12 +114,16 @@ const UniversidadInicio = () => {
                   <td>Comunidad de Madrid</td>
                   <td>Ingeniería y Arquitectura</td>
                   <td>150</td>
+                  <td>Matemáticas II, Tecnología e Ingeniería II</td>
+                  <td>Dibujo Técnico II, Matemáticas Apl. CC. Soc. II</td>
                 </tr>
                 <tr>
                   <td>Arquitectura</td>
                   <td>Comunidad de Madrid</td>
                   <td>Ingeniería y Arquitectura</td>
                   <td>120</td>
+                  <td>Dibujo Técnico II, Matemáticas II</td>
+                  <td>Matemáticas Apl. CC. Soc. II, Tecnología e Ingeniería II</td>
                 </tr>
 
 

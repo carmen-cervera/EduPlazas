@@ -1,15 +1,55 @@
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './PublicarOferta.module.css';
 import logo from '../../assets/LogoPequeño_FondoBlanco_SinGorro.png'
+import { obtenerUniversidades } from '../../services/authService';
 
 const PublicarOferta = () => {
   const navigate = useNavigate();
+  const [nombreUni, setNombreUni] = useState('');
   const [nombre, setNombre] = useState('');
   const [plazas, setPlazas] = useState('');
   const [comunidad, setComunidad] = useState('');
   const [rama, setRama] = useState('');
+  const listaAsignaturas = [
+    "Análisis Musical II", "Artes Escénicas II", "Biología", "Ciencias Generales",
+    "Coro y Técnica Vocal II", "Dibujo Artístico II", "Dibujo Técnico II",
+    "Dibujo Técn. Aplicado a las Artes Plásticas y al Diseño II", "Diseño",
+    "Empresa y Diseño de Modelos de Negocio", "Física", "Fundamentos Artísticos",
+    "Geografía", "Geología y CC. Ambientales", "Griego II", "Historia de España",
+    "Historia de la Filosofía", "Historia de la Música y de la Danza",
+    "Historia del Arte", "Latín II", "Literatura Dramática",
+    "Matemáticas II", "Matemáticas Apl. CC. Soc. II", "Movimientos Culturales y Artísticos",
+    "Química", "Técnicas de Expresión Gráfico-Plástica", "Tecnología e Ingeniería II"
+  ];
+  const [ponderan01, setPonderan01] = useState([]);
+  const [ponderan02, setPonderan02] = useState([]);
+  useEffect(() => {
+  const dataUsuario = localStorage.getItem('usuario');
+  
+  if (dataUsuario) {
+    const usuarioObj = JSON.parse(dataUsuario);
+
+    obtenerUniversidades()
+      .then(res => {
+        const lista = res.data;
+        
+        const miUni = lista.find(u => u.id === usuarioObj.id);
+        
+        if (miUni) {
+          setNombreUni(miUni.nombre); 
+        } else {
+          setNombreUni(usuarioObj.email); 
+        }
+      })
+      .catch(err => {
+        console.error("Error al cargar universidades:", err);
+        setNombreUni(usuarioObj.email);
+      });
+  }
+}, []);
   const handleLogout = () => {
+    localStorage.removeItem('usuario');
     localStorage.removeItem('token');
     navigate('/universidades/login');
   };
@@ -17,7 +57,7 @@ const PublicarOferta = () => {
     e.preventDefault(); // Detenemos el envío automático
 
     // VALIDACIÓN
-    // Comprobamos que el nombre no esté vacío, que haya plazas y que se haya elegido comunidad y rama
+    // Comprobamos que no haya campos vacíos. 
     if (!nombre.trim()) {
       alert("❌ Error: Debes introducir el nombre del grado.");
       return;
@@ -37,11 +77,14 @@ const PublicarOferta = () => {
       alert("❌ Error: Por favor, selecciona una Rama de conocimiento.");
       return;
     }
+
     const nuevaOferta = {
       nombre: nombre.trim(),
       plazas,
       comunidad,
       rama,
+      ponderaciones02: ponderan02,
+      ponderaciones01: ponderan01,
       id: Date.now()
     };
 
@@ -50,6 +93,16 @@ const PublicarOferta = () => {
 
     navigate('/universidad/inicio');
   };
+
+  const handleCheckboxChange = (asignatura, bloque, setBloque) => {
+    setBloque(prev =>
+      prev.includes(asignatura)
+        ? prev.filter(item => item !== asignatura)
+        : [...prev, asignatura]
+    );
+  };
+
+
 
   return (
     <div className={styles.page}>
@@ -62,7 +115,7 @@ const PublicarOferta = () => {
         <aside className={styles.sidebar}>
           <div className={styles.userBox}>
             <div className={styles.avatar}>🏛️</div>
-            <p className={styles.email}>Universidad Politécnica de Madrid</p>
+            <p className={styles.email}>{nombreUni}</p>
           </div>
           <nav>
             <button className={styles.primaryButton}>Publicar Oferta</button>
@@ -114,6 +167,37 @@ const PublicarOferta = () => {
                 <option value="Ciencias Sociales y Jurídicas">Ciencias Sociales y Jurídicas</option>
                 <option value="Ingeniería y Arquitectura">Ingeniería y Arquitectura</option>
               </select>
+
+              {/* SECCIÓN DE PONDERACIONES */}
+              <div style={{ marginTop: '20px', textAlign: 'left' }}>
+
+                <label className={styles.label} style={{ display: 'block', marginBottom: '10px' }}>
+                  Asignaturas que ponderan 0.2
+                </label>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '20px' }}>
+                  {listaAsignaturas.map(asig => (
+                    <label key={`02-${asig}`} style={{ fontSize: '0.9rem', color: '#3552a5', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                      <input type="checkbox" onChange={() => handleCheckboxChange(asig, ponderan02, setPonderan02)} />
+                      {asig}
+                    </label>
+                  ))}
+                </div>
+
+                <label className={styles.label} style={{ display: 'block', marginBottom: '10px' }}>
+                  Asignaturas que ponderan 0.1
+                </label>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '20px' }}>
+                  {listaAsignaturas.map(asig => (
+                    <label key={`01-${asig}`} style={{ fontSize: '0.9rem', color: '#3552a5', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                      <input type="checkbox" onChange={() => handleCheckboxChange(asig, ponderan01, setPonderan01)} />
+                      {asig}
+                    </label>
+                  ))}
+                </div>
+
+              </div>
+
+
 
 
               <div className={styles.footerButtons}>
