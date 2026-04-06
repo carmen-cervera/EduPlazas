@@ -28,7 +28,7 @@ function VerSolicitud() {
       setSolicitud(null)
       setError(err.response?.data || 'No se ha podido cargar la solicitud')
     }
-  
+
     try {
       const resAsignacion = await obtenerMiAsignacion(usuario.id)
       setAsignacion(resAsignacion.data)
