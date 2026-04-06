@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import {obtenerSolicitantePorUsuario, obtenerConvocatoriaAbierta, obtenerOfertas, crearSolicitud} from '../../services/solicitudService'
+import {obtenerSolicitantePorUsuario, obtenerConvocatoriaAbierta, obtenerOfertas, crearSolicitud, guardarNotas} from '../../services/solicitudService'
 import styles from './CrearSolicitud.module.css'
 import logo from '../../assets/LogoPequeño_FondoAzul_SinGorro.png'
 import avatar from '../../assets/avatar.png'
@@ -18,6 +18,27 @@ function CrearSolicitud() {
   const [prioridad3, setPrioridad3] = useState('')
   const [mensaje, setMensaje] = useState('')
   const [error, setError] = useState('')
+  const [notas, setNotas] = useState([
+    { asignatura: 'Bachillerato', nota: '' },
+    { asignatura: 'Lengua Castellana', nota: '' },
+    { asignatura: 'Historia de España', nota: '' },
+    { asignatura: 'Inglés', nota: '' },
+    { asignatura: 'Matemáticas', nota: '' },
+  ])
+  const [especifica1, setEspecifica1] = useState({ asignatura: '', nota: '' })
+  const [especifica2, setEspecifica2] = useState({ asignatura: '', nota: '' })
+
+  const ASIGNATURAS_ESPECIFICAS = [
+    'Análisis Musical II', 'Artes Escénicas II', 'Biología', 'Ciencias Generales',
+    'Coro y Técnica Vocal II', 'Dibujo Artístico II', 'Dibujo Técnico II',
+    'Dibujo Técn. Aplicado a las Artes Plásticas y al Diseño II', 'Diseño',
+    'Empresa y Diseño de Modelos de Negocio', 'Física', 'Fundamentos Artísticos',
+    'Geografía', 'Geología y CC. Ambientales', 'Griego II', 'Historia de España',
+    'Historia de la Filosofía', 'Historia de la Música y de la Danza',
+    'Historia del Arte', 'Latín II', 'Literatura Dramática',
+    'Matemáticas II', 'Matemáticas Apl. CC. Soc. II', 'Movimientos Culturales y Artísticos',
+    'Química', 'Técnicas de Expresión Gráfico-Plástica', 'Tecnología e Ingeniería II',
+  ]
 
   useEffect(() => {
     cargarDatos()
@@ -63,10 +84,30 @@ function CrearSolicitud() {
   }
 
 
+  const handleNotaChange = (index, value) => {
+    const nuevasNotas = [...notas]
+    nuevasNotas[index].nota = value
+    setNotas(nuevasNotas)
+  }
+
   const handleEnviarSolicitud = async () => {
     try {
       setError('')
       setMensaje('')
+
+      const notasInvalidas = notas.some(n => n.nota === '' || isNaN(n.nota) || Number(n.nota) < 0 || Number(n.nota) > 10)
+      if (notasInvalidas) {
+        setError('Introduce todas las notas (entre 0 y 10)')
+        return
+      }
+      if (!especifica1.asignatura || especifica1.nota === '' || Number(especifica1.nota) < 0 || Number(especifica1.nota) > 10) {
+        setError('Introduce la asignatura y nota de Materia específica 1 (entre 0 y 10)')
+        return
+      }
+      if (!especifica2.asignatura || especifica2.nota === '' || Number(especifica2.nota) < 0 || Number(especifica2.nota) > 10) {
+        setError('Introduce la asignatura y nota de Materia específica 2 (entre 0 y 10)')
+        return
+      }
 
       const idsSeleccionados = [prioridad1, prioridad2, prioridad3]
         .filter((id) => id !== '')
@@ -81,6 +122,13 @@ function CrearSolicitud() {
         setError('No puedes repetir el mismo grado en varias prioridades')
         return
       }
+
+      const todasLasNotas = [
+        ...notas.map(n => ({ asignatura: n.asignatura, nota: Number(n.nota) })),
+        { asignatura: especifica1.asignatura, nota: Number(especifica1.nota) },
+        { asignatura: especifica2.asignatura, nota: Number(especifica2.nota) },
+      ]
+      await guardarNotas(solicitante.id, todasLasNotas)
 
       const solicitud = {
         solicitante: { id: solicitante.id },
@@ -160,12 +208,74 @@ function CrearSolicitud() {
             {mensaje && <p className={styles.success}>{mensaje}</p>}
 
             <div className={styles.formulario}>
-              
+
               {convocatoria && (
-              <p className={styles.convocatoria}>
-                <strong>Convocatoria abierta:</strong> {convocatoria.nombre}
-              </p>
-            )}
+                <p className={styles.convocatoria}>
+                  <strong>Convocatoria abierta:</strong> {convocatoria.nombre}
+                </p>
+              )}
+
+              <h3 className={styles.label}>Notas EvAU</h3>
+              {notas.map((nota, index) => (
+                <div key={index}>
+                  <label className={styles.label}>{nota.asignatura}:</label>
+                  <input
+                    className={styles.select}
+                    type="number"
+                    min="0"
+                    max="10"
+                    step="0.01"
+                    placeholder="0 - 10"
+                    value={nota.nota}
+                    onChange={(e) => handleNotaChange(index, e.target.value)}
+                  />
+                </div>
+              ))}
+
+              <div>
+                <label className={styles.label}>Materia específica 1:</label>
+                <select
+                  className={styles.select}
+                  value={especifica1.asignatura}
+                  onChange={(e) => setEspecifica1({ ...especifica1, asignatura: e.target.value })}
+                >
+                  <option value="">Selecciona asignatura</option>
+                  {ASIGNATURAS_ESPECIFICAS.map(a => <option key={a} value={a}>{a}</option>)}
+                </select>
+                <input
+                  className={styles.select}
+                  type="number"
+                  min="0"
+                  max="10"
+                  step="0.01"
+                  placeholder="0 - 10"
+                  value={especifica1.nota}
+                  onChange={(e) => setEspecifica1({ ...especifica1, nota: e.target.value })}
+                />
+              </div>
+
+              <div>
+                <label className={styles.label}>Materia específica 2:</label>
+                <select
+                  className={styles.select}
+                  value={especifica2.asignatura}
+                  onChange={(e) => setEspecifica2({ ...especifica2, asignatura: e.target.value })}
+                >
+                  <option value="">Selecciona asignatura</option>
+                  {ASIGNATURAS_ESPECIFICAS.map(a => <option key={a} value={a}>{a}</option>)}
+                </select>
+                <input
+                  className={styles.select}
+                  type="number"
+                  min="0"
+                  max="10"
+                  step="0.01"
+                  placeholder="0 - 10"
+                  value={especifica2.nota}
+                  onChange={(e) => setEspecifica2({ ...especifica2, nota: e.target.value })}
+                />
+              </div>
+
               <label className={styles.label}>Grado de prioridad 1:</label>
               <select
                 className={styles.select}

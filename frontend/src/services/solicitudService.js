@@ -16,3 +16,6 @@ export const obtenerVerSolicitud = (usuarioId) =>
 
 export const crearSolicitud = (solicitud) =>
   axios.post(`${BASE_URL}`, solicitud)
+
+export const guardarNotas = (solicitanteId, notas) =>
+  axios.put(`${BASE_URL}/solicitante/${solicitanteId}/notas`, notas)

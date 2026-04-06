@@ -1,14 +1,17 @@
 package com.eduplazas.backend.service;
 
 import com.eduplazas.backend.model.Convocatoria;
+import com.eduplazas.backend.model.NotaAsignatura;
 import com.eduplazas.backend.model.Oferta;
 import com.eduplazas.backend.model.Solicitante;
 import com.eduplazas.backend.model.Solicitud;
 import com.eduplazas.backend.repository.ConvocatoriaRepository;
+import com.eduplazas.backend.repository.NotaAsignaturaRepository;
 import com.eduplazas.backend.repository.OfertaRepository;
 import com.eduplazas.backend.repository.SolicitanteRepository;
 import com.eduplazas.backend.repository.SolicitudRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.HashSet;
@@ -24,15 +27,18 @@ public class SolicitudService {
     private final SolicitanteRepository solicitanteRepository;
     private final ConvocatoriaRepository convocatoriaRepository;
     private final OfertaRepository ofertaRepository;
+    private final NotaAsignaturaRepository notaAsignaturaRepository;
 
     public SolicitudService(SolicitudRepository solicitudRepository,
                             SolicitanteRepository solicitanteRepository,
                             ConvocatoriaRepository convocatoriaRepository,
-                            OfertaRepository ofertaRepository ) {
+                            OfertaRepository ofertaRepository,
+                            NotaAsignaturaRepository notaAsignaturaRepository) {
         this.solicitudRepository = solicitudRepository;
         this.solicitanteRepository = solicitanteRepository;
         this.convocatoriaRepository = convocatoriaRepository;
         this.ofertaRepository = ofertaRepository;
+        this.notaAsignaturaRepository = notaAsignaturaRepository;
     }
     //CREACIÓN DE LA SOLICITUD
     public Solicitud crearSolicitud(Solicitud solicitudRecibida) {
@@ -109,5 +115,18 @@ public class SolicitudService {
 
     public List<Oferta> obtenerOfertasPorConvocatoria(Long convocatoriaId) {
         return ofertaRepository.findByConvocatoriaId(convocatoriaId);
+    }
+
+    @Transactional
+    public void guardarNotas(Long solicitanteId, List<NotaAsignatura> notas) {
+        Solicitante solicitante = solicitanteRepository.findById(solicitanteId)
+                .orElseThrow(() -> new RuntimeException("Solicitante no encontrado"));
+
+        notaAsignaturaRepository.deleteBySolicitanteId(solicitanteId);
+
+        for (NotaAsignatura nota : notas) {
+            nota.setSolicitante(solicitante);
+            notaAsignaturaRepository.save(nota);
+        }
     }
 }

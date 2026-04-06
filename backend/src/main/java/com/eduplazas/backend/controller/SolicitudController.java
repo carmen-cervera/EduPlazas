@@ -1,6 +1,7 @@
 package com.eduplazas.backend.controller;
 
 import com.eduplazas.backend.model.Convocatoria;
+import com.eduplazas.backend.model.NotaAsignatura;
 import com.eduplazas.backend.model.Oferta;
 import com.eduplazas.backend.model.Solicitante;
 import com.eduplazas.backend.model.Solicitud;
@@ -9,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/solicitudes")
@@ -64,6 +66,18 @@ public class SolicitudController {
         try {
             Solicitud nuevaSolicitud = solicitudService.crearSolicitud(solicitud);
             return ResponseEntity.ok(nuevaSolicitud);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    // guardar notas EvAU del solicitante
+    @PutMapping("/solicitante/{solicitanteId}/notas")
+    public ResponseEntity<?> guardarNotas(@PathVariable Long solicitanteId,
+                                          @RequestBody List<NotaAsignatura> notas) {
+        try {
+            solicitudService.guardarNotas(solicitanteId, notas);
+            return ResponseEntity.ok("Notas guardadas correctamente");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
