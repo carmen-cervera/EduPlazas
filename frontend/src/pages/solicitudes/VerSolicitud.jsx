@@ -19,18 +19,23 @@ function VerSolicitud() {
     cargarSolicitud()
   }, [])
 
-  const cargarSolicitud = async () => {
-    try {
-      setError('')
-      const res = await obtenerVerSolicitud(usuario.id)
-      setSolicitud(res.data)
-      const resAsignacion = await obtenerMiAsignacion(usuario.id)
-      setAsignacion(resAsignacion.data)
-    } catch (err) {
-      setSolicitud(null)
-      setError(err.response?.data || 'No se ha podido cargar la solicitud')
-    }
+const cargarSolicitud = async () => {
+  try {
+    setError('')
+    const res = await obtenerVerSolicitud(usuario.id)
+    setSolicitud(res.data)
+  } catch (err) {
+    setSolicitud(null)
+    setError(err.response?.data || 'No se ha podido cargar la solicitud')
   }
+
+  try {
+    const resAsignacion = await obtenerMiAsignacion(usuario.id)
+    setAsignacion(resAsignacion.data)
+  } catch (err) {
+    setAsignacion(null)
+  }
+}
 
   const cerrarSesion = () => {
     localStorage.removeItem('usuario')
