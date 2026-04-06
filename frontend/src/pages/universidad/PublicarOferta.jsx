@@ -63,7 +63,7 @@ function PublicarOferta() {
             </button>
           </div>
 
-          <button className={styles.button} onClick={cerrarSesion}>
+          <button className={styles.logoutBtn} onClick={cerrarSesion}>
             Log out
           </button>
         </aside>

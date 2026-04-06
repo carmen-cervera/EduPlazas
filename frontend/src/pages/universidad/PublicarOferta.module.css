@@ -176,3 +176,60 @@
   display: flex;
   justify-content: center;
 }
+
+.cardTitle {
+  color: #3552a5;
+  font-size: 1.4rem;
+  margin: 0 0 10px 0;
+}
+
+.subText {
+  color: #555;
+  font-size: 0.95rem;
+  margin-bottom: 20px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.buttonSubmit {
+  background-color: #3552a5;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 14px;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.buttonSubmit:hover {
+  background-color: #2a3f8a;
+}
+
+.error {
+  color: #c0392b;
+  font-weight: bold;
+}
+
+.exito {
+  color: #27ae60;
+  font-weight: bold;
+}
+
+.universidad {
+  color: #c8d6f5;
+  font-size: 0.85rem;
+  margin: 4px 0 0 0;
+}
