@@ -159,7 +159,7 @@ function CrearSolicitud() {
       <option value="">Selecciona un grado</option>
       {ofertas.map((oferta) => (
         <option key={oferta.id} value={oferta.id}>
-          {oferta.grado} 
+          {oferta.grado} ({oferta.universidadNombre})
         </option>
       ))}
     </>

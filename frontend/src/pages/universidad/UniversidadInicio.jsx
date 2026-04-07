@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { obtenerConvocatoriaAbierta } from '../../services/solicitudService'
 import { procesarAsignaciones } from '../../services/asignacionService'
 import styles from './UniversidadInicio.module.css'
+import logo from '../../assets/LogoPequeño_FondoBlanco_SinGorro.png'
 
 function UniversidadInicio() {
   const navigate = useNavigate()
@@ -33,6 +34,12 @@ function UniversidadInicio() {
   return (
     <div className={styles.page}>
       <header className={styles.header}>
+        <img
+          src={logo}
+          alt="EduPlazas"
+          className={styles.logoImg}
+          onClick={() => navigate('/')}
+        />
         <h1 className={styles.tituloHeader}>Panel Universidad</h1>
       </header>
 
