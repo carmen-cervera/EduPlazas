@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { obtenerOfertasMiUniversidad } from '../../services/ofertaService'
 import styles from './UniversidadInicio.module.css'
+import logo from '../../assets/LogoPequeño_FondoBlanco_SinGorro.png'
 
 function MisOfertas() {
   const navigate = useNavigate()
@@ -24,6 +25,12 @@ function MisOfertas() {
   return (
     <div className={styles.page}>
       <header className={styles.header}>
+        <img
+          src={logo}
+          alt="EduPlazas"
+          className={styles.logoImg}
+          onClick={() => navigate('/')}
+        />
         <h1 className={styles.tituloHeader}>Mis ofertas publicadas</h1>
       </header>
 
@@ -43,8 +50,8 @@ function MisOfertas() {
             </button>
           </div>
 
-          <button className={styles.button} onClick={cerrarSesion}>
-            Log out
+          <button className={styles.logoutBtn} onClick={cerrarSesion}>
+              Log out
           </button>
         </aside>
 

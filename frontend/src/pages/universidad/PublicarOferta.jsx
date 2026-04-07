@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { publicarOferta } from '../../services/ofertaService'
 import styles from './PublicarOferta.module.css'
+import logo from '../../assets/LogoPequeño_FondoBlanco_SinGorro.png'
 
 function PublicarOferta() {
   const navigate = useNavigate()
@@ -80,6 +81,12 @@ function PublicarOferta() {
   return (
     <div className={styles.page}>
       <header className={styles.header}>
+        <img
+          src={logo}
+          alt="EduPlazas"
+          className={styles.logoImg}
+          onClick={() => navigate('/')}
+        />
         <h1 className={styles.tituloHeader}>Publicar oferta</h1>
       </header>
 
