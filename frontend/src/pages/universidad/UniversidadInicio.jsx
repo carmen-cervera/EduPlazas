@@ -57,6 +57,12 @@ function UniversidadInicio() {
             <button className={styles.button} onClick={() => navigate('/universidad/mis-ofertas')}>
               Mis ofertas
             </button>
+            <button
+              className={styles.button}
+              onClick={() => navigate('/universidad/solicitudes')}
+            >
+              Solicitudes recibidas
+            </button>
           </div>
 
           <button className={styles.logoutBtn} onClick={cerrarSesion}>

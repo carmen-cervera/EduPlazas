@@ -1,5 +1,6 @@
 package com.eduplazas.backend.controller;
 
+import com.eduplazas.backend.dto.SolicitudRecibidaDTO;
 import com.eduplazas.backend.model.Convocatoria;
 import com.eduplazas.backend.model.NotaAsignatura;
 import com.eduplazas.backend.model.Oferta;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
+
 @RestController
 @RequestMapping("/solicitudes")
 @CrossOrigin(origins = "http://localhost:5173")
@@ -22,8 +24,8 @@ public class SolicitudController {
     public SolicitudController(SolicitudService solicitudService) {
         this.solicitudService = solicitudService;
     }
-    
-    // ver el solicitante asociado al usuario 
+
+    // ver el solicitante asociado al usuario
     @GetMapping("/solicitante/{usuarioId}")
     public ResponseEntity<?> obtenerSolicitantePorUsuario(@PathVariable Long usuarioId) {
         Solicitante solicitante = solicitudService.obtenerSolicitantePorUsuario(usuarioId);
@@ -42,13 +44,14 @@ public class SolicitudController {
         }
         return ResponseEntity.ok(convocatoria);
     }
+
     // ver ofertas
     @GetMapping("/ofertas")
     public ResponseEntity<List<Oferta>> obtenerOfertas(@RequestParam Long convocatoriaId) {
         return ResponseEntity.ok(solicitudService.obtenerOfertasPorConvocatoria(convocatoriaId));
     }
 
-    //ver mi solicitud 
+    // ver mi solicitud
     @GetMapping("/ver-solicitud/{usuarioId}")
     public ResponseEntity<?> obtenerVerSolicitud(@PathVariable Long usuarioId) {
         Solicitud solicitud = solicitudService.obtenerSolicitudPorUsuario(usuarioId);
@@ -74,12 +77,18 @@ public class SolicitudController {
     // guardar notas EvAU del solicitante
     @PutMapping("/solicitante/{solicitanteId}/notas")
     public ResponseEntity<?> guardarNotas(@PathVariable Long solicitanteId,
-                                          @RequestBody List<NotaAsignatura> notas) {
+            @RequestBody List<NotaAsignatura> notas) {
         try {
             solicitudService.guardarNotas(solicitanteId, notas);
             return ResponseEntity.ok("Notas guardadas correctamente");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
+
+    @GetMapping("/universidad/recibidas/{univId}")
+    public ResponseEntity<List<SolicitudRecibidaDTO>> listarRecibidas(@PathVariable Long univId) {
+        List<SolicitudRecibidaDTO> lista = solicitudService.obtenerSolicitudesParaUniversidad(univId);
+        return ResponseEntity.ok(lista);
     }
 }

@@ -1,5 +1,6 @@
 package com.eduplazas.backend.service;
 
+import com.eduplazas.backend.dto.SolicitudRecibidaDTO;
 import com.eduplazas.backend.model.Convocatoria;
 import com.eduplazas.backend.model.NotaAsignatura;
 import com.eduplazas.backend.model.Oferta;
@@ -13,13 +14,12 @@ import com.eduplazas.backend.repository.SolicitudRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
 import java.util.List;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-
 
 @Service
 public class SolicitudService {
@@ -31,20 +31,21 @@ public class SolicitudService {
     private final NotaAsignaturaRepository notaAsignaturaRepository;
 
     public SolicitudService(SolicitudRepository solicitudRepository,
-                            SolicitanteRepository solicitanteRepository,
-                            ConvocatoriaRepository convocatoriaRepository,
-                            OfertaRepository ofertaRepository,
-                            NotaAsignaturaRepository notaAsignaturaRepository) {
+            SolicitanteRepository solicitanteRepository,
+            ConvocatoriaRepository convocatoriaRepository,
+            OfertaRepository ofertaRepository,
+            NotaAsignaturaRepository notaAsignaturaRepository) {
         this.solicitudRepository = solicitudRepository;
         this.solicitanteRepository = solicitanteRepository;
         this.convocatoriaRepository = convocatoriaRepository;
         this.ofertaRepository = ofertaRepository;
         this.notaAsignaturaRepository = notaAsignaturaRepository;
     }
-    //CREACIÓN DE LA SOLICITUD
+
+    // CREACIÓN DE LA SOLICITUD
     public Solicitud crearSolicitud(Solicitud solicitudRecibida) {
         //
-        if(solicitudRecibida.getSolicitante() == null || solicitudRecibida.getSolicitante().getId() == null){
+        if (solicitudRecibida.getSolicitante() == null || solicitudRecibida.getSolicitante().getId() == null) {
             throw new RuntimeException("ERROR: Debes indicar que eres el solicitante");
         }
         //
@@ -106,8 +107,8 @@ public class SolicitudService {
 
         return solicitudRepository.save(nuevaSolicitud);
 
-
     }
+
     public Solicitante obtenerSolicitantePorUsuario(Long usuarioId) {
         return solicitanteRepository.findByUsuarioId(usuarioId).orElse(null);
     }
@@ -125,8 +126,7 @@ public class SolicitudService {
     }
 
     private static final java.util.Set<String> ASIGNATURAS_COMUNES = java.util.Set.of(
-        "Lengua Castellana", "Historia de España", "Inglés", "Matemáticas"
-    );
+            "Lengua Castellana", "Historia de España", "Inglés", "Matemáticas");
 
     @Transactional
     public void guardarNotas(Long solicitanteId, List<NotaAsignatura> notas) {
@@ -148,5 +148,9 @@ public class SolicitudService {
 
         solicitante.setNotaBase(notaBase);
         solicitanteRepository.save(solicitante);
+    }
+
+    public List<SolicitudRecibidaDTO> obtenerSolicitudesParaUniversidad(Long univId) {
+        return solicitudRepository.findSolicitudesByUniversidadId(univId);
     }
 }
